@@ -1,0 +1,61 @@
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+}
+
+#search-arr {
+	position: relative;
+	width: 200px;
+	margin: 50px auto;
+}
+
+#searchInput {
+	outline: none;
+	width: 200px;
+	height: 30px;
+	border: 1px solid rgba(109, 207, 246, .5);
+	border-radius: 25px;
+	padding: 10px 10px 10px 20px;
+	background: #ededed;
+	transition: all ease .4s;
+}
+
+#searchInput:focus {
+	/* width:250px; */
+	box-shadow: 0 0 5px rgba(109, 207, 246, .5);
+	background: white;
+}
+
+ul#selectItem {
+	display: none;
+	position: absolute;
+	top: 31px;
+	width: 100%;
+	border: 1px solid gray;
+	border-top: none;
+}
+
+li {
+	width: 100%;
+	list-style-type: none;
+	background: white;
+	color: black;
+	/* padding:10px; */
+	cursor: pointer;
+}
+
+li:hover {
+	background: #ededed;
+}
+
+a {
+	display: inline-block;
+	text-decoration: none;
+	color: black;
+	width: 100%;
+	padding: 1px 5px;
+}
+
+作者：Katherine的小世界 链接：http: //www.jianshu.com/p/ba0c814efc55
+來源：简书 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
