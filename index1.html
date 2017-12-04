@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+		<title>搜素自动补全</title>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+			}
+			
+			ul li {
+				list-style: none;
+			}
+			
+			li {
+				height: 30px;
+				width: 300px;
+				line-height: 30px;
+				font-size: 18px;
+				border: 1px solid #ccc;
+				border-top: 0;
+				box-sizing: border-box;
+			}
+			
+			#search-arr {
+				margin: 10px;
+			}
+			
+			#searchInput {
+				width: 300px;
+				height: 36px;
+				box-sizing: border-box;
+				padding: auto;
+			}
+			
+			#selectItem li.on {
+				background: #bbb;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="search-arr">
+			<input type="text" id="searchInput" type="search" placeholder="search">
+			<ul id="selectItem"></ul>
+		</div>
+		<script src="js/jquery.js"></script>
+		<script>
+			var cur = -1;
+			var target = document.getElementById("search-arr");
+
+			function getSearchList(name) {
+				var temp = "<li>" + name + "</li>";
+				$("#selectItem").append(temp);
+			}
+
+			function getAjax(newValue) {
+				var urls = 'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=' + (newValue);
+				$.ajax({
+					type: "get",
+					url: urls,
+					dataType: "JSONP",
+					jsonp: 'cb',
+					success: function(msg) {
+						console.log(msg)
+						$("#selectItem").empty();
+						if(msg.s.length >= 6) {
+							msg.s.length = 6
+						}
+						for(var i = 0; i < msg.s.length; i++) {
+							getSearchList(msg.s[i])
+						}
+					},
+					error: function(err) {
+						console.log(err)
+					}
+				});
+			}
+
+			function checkKeyCode(e) {
+				var e = event || window.event || arguments.callee.caller.arguments[0];
+				var as = document.getElementById('selectItem').getElementsByTagName('li');
+				switch(e.keyCode) {
+					case 38: //上
+						if(cur == -1) {
+							cur = as.length - 1;
+							console.log(cur);
+						} else {
+							as[cur].className = '';
+							cur -= 1;
+						}
+						if(cur < 0) {
+							cur = as.length - 1;
+						}
+						as[cur].classList = 'on'
+						break;
+					case 40: //下
+						if(cur == -1) {
+							cur = 0;
+						} else {
+							as[cur].className = '';
+							cur++;
+						}
+						if(cur >= as.length) {
+							cur = 0;
+						}
+						as[cur].classList = 'on'
+						break;
+					case 13: //回车选择
+						if(cur != -1) document.getElementById('searchInput').value = as[cur].innerHTML;
+						break;
+				}
+			}
+
+			$("#searchInput").bind('input propertychange', function() {
+				var newV = $(this).val();
+				getAjax(newV);
+			});
+			target.addEventListener('keydown', (e) => {
+				checkKeyCode(e);
+			})
+		</script>
+	</body>
+
+</html>
